@@ -1,11 +1,26 @@
 class Player
-  attr_reader :skills
+  attr_reader :player_status, :skills, :player_basic_action
 
   def initialize(args)
-    @player_parameter = PlayerParameter.new(args)
-    @skills = args[:skills] || nil
+    @player_status = PlayerStatus.new
+    @player_basic_action = PlayerBasicAction.new
+    @skills = args[:skills]
   end
 
+  def attack
+    player_basic_action.attack
+  end
+
+  def defense
+    player_basic_action.defense
+  end
+
+  def run_skills
+    skills.run_skill(skills)
+  end
+end
+
+class PlayerBasicAction
   def attack
     puts '物理攻撃！相手に10HPのダメージ！！'
   end
@@ -13,29 +28,30 @@ class Player
   def defense
     puts '身を守る！10HPのダメージを軽減する！！'
   end
-
-  def run_skills
-    puts '使用する魔法を記入してください'
-    skills.show_skills.each_with_index do |skill, i|
-      puts "#{i}：#{skill.name}"
-    end
-    input = gets.to_i
-    skill = skills.show_skills[input]
-    skill.run_skill
-  end
 end
 
 class PlayerParameter
-  attr_reader :name, :gender, :vitality
+  attr_reader :name, :description, :value
 
   def initialize(args)
     @name = args[:name] || nil
-    @gender = args[:gender] || nil
-    @vitality = args[:vitality] || nil
+    @description = args[:description] || nil
+    @value = args[:value] || nil
   end
 end
 
-class Skills
+class PlayerStatus
+  attr_reader :nickname, :gender, :vitality
+
+  def initialize
+    @nickname = PlayerParameter.new(name: "名前", description: "プレイヤーの名前です。", value: "ひぐち")
+    @gender = PlayerParameter.new(name: "性別", description: "プレイヤーの性別です。", value: "女")
+    @vitality = PlayerParameter.new(name: "HP", description: "プレイヤーがもつ体力ゲージです", value: 100)
+  end
+end
+
+
+class Skill
   attr_reader :fire_magic, :lighting_magic, :heal_magic, :dark_magic, :ice_magic
 
   def initialize(args)
@@ -46,8 +62,14 @@ class Skills
     @heal_magic = args[:heal_magic] || nil
   end
 
-  def run_skill
-    raise 'Called abstract method: run_skill'
+  def run_skill(skills)
+    puts '使用する魔法を記入してください'
+    skills.show_skills.each_with_index do |skill, i|
+      puts "#{i}：#{skill.name}"
+    end
+    input = gets.to_i
+    skill = skills.show_skills[input]
+    skill.run_skill
   end
 
   def show_skills
@@ -121,9 +143,10 @@ class HealMagic
   end
 end
 
-skills = Skills.new(heal_magic: HealMagic.new, lighting_magic: LightingMagic.new)
 
-player = Player.new({ name: 'tanaka', gender: 'women', vitality: 100, skills: skills })
+skills = Skill.new(heal_magic: HealMagic.new, lighting_magic: LightingMagic.new)
+
+player = Player.new({ skills: skills })
 
 player.run_skills
 

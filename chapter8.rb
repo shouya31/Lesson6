@@ -8,22 +8,6 @@ class CPU
     get_skills(args)
   end
 
-  def get_skills
-    nil
-  end
-end
-
-class Player < CPU
-  attr_reader :fire_magic, :lighting_magic, :heal_magic, :dark_magic, :ice_magic
-
-  def get_skills(args)
-    @fire_magic = args[:fire_magic] || nil
-    @dark_magic = args[:dark_magic] || nil
-    @lighting_magic = args[:lighting_magic] || nil
-    @heal_magic = args[:heal_magic] || nil
-    @ice_magic = args[:ice_magic] || nil
-  end
-
   def attack
     puts '物理攻撃！相手に10HPのダメージ！！'
   end
@@ -32,48 +16,26 @@ class Player < CPU
     puts '身を守る！10HPのダメージを軽減する！！'
   end
 
-  def run_fire_skill
-    if fire_magic
-      fire_magic.run_skill
-    else
-      output_nothing_skill
-    end
+  def get_skills
+    nil
+  end
+end
+
+class Player < CPU
+  attr_reader :skills
+
+  def get_skills(args)
+    @skills = args[:skills] || nil
   end
 
-  def run_heal_skill
-    if heal_magic
-      heal_magic.run_skill
-    else
-      output_nothing_skill
+  def run_skills
+    puts '使用する魔法を数字で記入してください'
+    skills.each_with_index do |skill, i|
+      puts "#{i + 1}：#{skill.name}"
     end
-  end
-
-  def run_dark_skill
-    if dark_magic
-      dark_magic.run_skill
-    else
-      output_nothing_skill
-    end
-  end
-
-  def run_ice_skill
-    if ice_magic
-      ice_magic.run_skill
-    else
-      output_nothing_skill
-    end
-  end
-
-  def run_lighting_skill
-    if lighting_magic
-      lighting_magic.run_skill
-    else
-      output_nothing_skill
-    end
-  end
-
-  def output_nothing_skill
-    puts 'そのスキルは覚えていません!!'
+    input = gets.to_i
+    skill = skills[input - 1]
+    skill.run_skill
   end
 end
 
@@ -149,22 +111,16 @@ dark_magic = DarkMagic.new
 ice_magic = IceMagic.new
 lighting_magic = LightingMagic.new
 
-player1 = Player.new({ name: 'tanaka', gender: 'woman', vitality: 100, fire_magic: fire_magic, lighting_magic: lighting_magic })
-player2 = Player.new({ name: 'higuchi', gender: 'man', vitality: 120, dark_magic: dark_magic })
+skill_set1 = [ heal_magic, fire_magic, ice_magic ]
+skill_set2 = [ lighting_magic, dark_magic ]
 
-puts '【player1】'
-player1.run_fire_skill
-player1.run_heal_skill
-player1.run_dark_skill
-player1.run_ice_skill
-player1.run_lighting_skill
+player1 = Player.new({ name: 'tanaka', gender: 'woman', vitality: 100, skills: skill_set1 })
+player2 = Player.new({ name: 'higuchi', gender: 'man', vitality: 120, skills: skill_set2 })
+
+puts '【player1】の攻撃'
+player1.run_skills
+
 puts '-------------------------'
 
-puts '【player2】'
-player2.run_fire_skill
-player2.run_heal_skill
-player2.run_dark_skill
-player2.run_ice_skill
-player2.run_lighting_skill
-puts '-------------------------'
-
+puts '【player2】の攻撃'
+player2.run_skills
