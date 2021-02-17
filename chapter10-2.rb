@@ -1,10 +1,6 @@
 class CPU
-  attr_reader :name, :gender, :vitality
-
   def initialize(args)
-    @name = args[:name]
-    @gender = args[:gender]
-    @vitality = args[:vitality]
+    player_parameters = PlayerParameters.new(args)
     get_occupy(args)
   end
 
@@ -21,15 +17,29 @@ class CPU
   end
 end
 
+class PlayerParameter
+  attr_reader :player_parameter
+
+  def initialize(player_parameter)
+    @player_parameter = player_parameter || nil
+  end
+end
+
+class PlayerParameters
+  attr_reader :name, :gender, :vitality
+
+  def initialize(args)
+    @name = PlayerParameter.new(args[:name])
+    @gender = PlayerParameter.new(args[:gender])
+    @vitality = PlayerParameter.new(args[:vitality])
+  end
+end
+
 class Player < CPU
   attr_reader :occupy
 
   def get_occupy(args)
     @occupy = args[:occupy]
-  end
-
-  def run_skill
-    occupy.run_skill
   end
 
   def attack
@@ -38,6 +48,10 @@ class Player < CPU
 
   def defense
     puts '身を守る！10HPのダメージを軽減する！！'
+  end
+
+  def run_skill
+    occupy.run_skill
   end
 end
 
