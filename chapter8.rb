@@ -8,11 +8,11 @@ class CPU
   end
 
   def attack
-    puts '物理攻撃！相手に10HPのダメージ！！'
+    raise "Called abstract method: attack"
   end
 
   def defense
-    puts '身を守る！10HPのダメージを軽減する！！'
+    raise "Called abstract method: defense"
   end
 end
 
@@ -20,11 +20,27 @@ class Wizard < CPU
   def run_attck_magic
     puts 'こうげきじゅもんをとなえた！ 相手に20HPダメージ。'
   end
+
+  def attack
+    raise '物理攻撃！相手に10HPのダメージ！！'
+  end
+
+  def defense
+    raise '身を守る！10HPのダメージを軽減する！！'
+  end
 end
 
 class Cleric < CPU
   def run_heal_magic
     puts '回復呪文を発動しました。30HP回復します。'
+  end
+
+  def attack
+    raise '物理攻撃！相手に10HPのダメージ！！'
+  end
+
+  def defense
+    raise '身を守る！10HPのダメージを軽減する！！'
   end
 end
 
@@ -35,6 +51,14 @@ class Sage < CPU
 
   def run_heal_magic
     puts '回復呪文を発動しました。30HP回復します。'
+  end
+
+  def attack
+    raise '物理攻撃！相手に10HPのダメージ！！'
+  end
+
+  def defense
+    raise '身を守る！10HPのダメージを軽減する！！'
   end
 end
 

@@ -9,11 +9,11 @@ class CPU
   end
 
   def attack
-    puts '物理攻撃！相手に10HPのダメージ！！'
+    raise "Called abstract method: attack"
   end
 
   def defense
-    puts '身を守る！10HPのダメージを軽減する！！'
+    raise "Called abstract method: defense"
   end
 
   def get_occupy
@@ -30,6 +30,14 @@ class Player < CPU
 
   def run_skill
     occupy.run_skill
+  end
+
+  def attack
+    puts '物理攻撃！相手に10HPのダメージ！！'
+  end
+
+  def defense
+    puts '身を守る！10HPのダメージを軽減する！！'
   end
 end
 

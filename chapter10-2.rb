@@ -1,30 +1,19 @@
 class CPU
   def initialize(args)
     player_parameters = PlayerParameters.new(args)
-    @player_basic_action = PlayerBasicAction.new
     get_occupy(args)
   end
 
   def attack
-    player_basic_action.attack
+    raise "Called abstract method: attack"
   end
 
   def defense
-    player_basic_action.defense
+    raise "Called abstract method: defense"
   end
 
   def get_occupy
     nil
-  end
-end
-
-class PlayerBasicAction
-  def attack
-    puts '物理攻撃！相手に10HPのダメージ！！'
-  end
-
-  def defense
-    puts '身を守る！10HPのダメージを軽減する！！'
   end
 end
 
@@ -51,6 +40,14 @@ class Player < CPU
 
   def get_occupy(args)
     @occupy = args[:occupy]
+  end
+
+  def attack
+    puts '物理攻撃！相手に10HPのダメージ！！'
+  end
+
+  def defense
+    puts '身を守る！10HPのダメージを軽減する！！'
   end
 
   def run_skill
