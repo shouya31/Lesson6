@@ -1,13 +1,24 @@
 class CPU
-  attr_reader :name, :gender, :vitality
-
   def initialize(args)
-    @name = args[:name]
-    @gender = args[:gender]
-    @vitality = args[:vitality]
+    player_parameters = PlayerParameters.new(args)
+    @player_basic_action = PlayerBasicAction.new
     get_occupy(args)
   end
 
+  def attack
+    player_basic_action.attack
+  end
+
+  def defense
+    player_basic_action.defense
+  end
+
+  def get_occupy
+    nil
+  end
+end
+
+class PlayerBasicAction
   def attack
     puts '物理攻撃！相手に10HPのダメージ！！'
   end
@@ -15,9 +26,23 @@ class CPU
   def defense
     puts '身を守る！10HPのダメージを軽減する！！'
   end
+end
 
-  def get_occupy
-    nil
+class PlayerParameter
+  attr_reader :player_parameter
+
+  def initialize(player_parameter)
+    @player_parameter = player_parameter || nil
+  end
+end
+
+class PlayerParameters
+  attr_reader :name, :gender, :vitality
+
+  def initialize(args)
+    @name = PlayerParameter.new(args[:name])
+    @gender = PlayerParameter.new(args[:gender])
+    @vitality = PlayerParameter.new(args[:vitality])
   end
 end
 
